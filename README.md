@@ -1,165 +1,34 @@
-# ![](https://ga-dash.s3.amazonaws.com/production/assets/logo-9f88ae6c9c3871690e33280fcf557f33.png) Project 3: Web APIs & NLP
+# Project 3: Web APIs & NLP
 
-### Description
+## Problem Statement
+After a huge success from releaseing Mario Kart Tour, Nintendo is about to release another interation of Mario Kart and wants to utilize their social media presence to create buzz. The marketing department has come up with the use of a hashtag! However, the office has become split about what hashtag to use. Some say to just use "Mario Kart" because it's known, some are arguing that "Mario Kart" too general for this new release, others are just throwing random words to spice things up like "Luigi Kart," "Mushroom Race," and "Mario Drive." With a divided office, they managed to all agree on one thing: hire an analyst to help them decide. What word should be the marketing hashtag for the upcoming Mario Kart? 
 
-In week four we've learned about a few different classifiers. In week five we'll learn about webscraping, APIs, and Natural Language Processing (NLP). This project will put those skills to the test.
+## Executive Summary
+We begin our process by going to the home of topic conversations: Reddit. There we decided to choose two popular Mario game subreddits: Mario Kart and Smash Bros Ultimate. From those two subreddits, we began by gathering our data through webscraping via 10 request pulls and converting all our findings into a nice data frame to work with in our analysis (which can be found in a separate notebook in the code folder). Afterwards, we saved and exportd our nicely converted data to be imported into a new notebook to begin a cleaning and exploratory data analysis to fix any immediately noticeable values that wouldn't be beneficial to us. 
 
-For project 3, your goal is two-fold:
-1. Using [Pushshift's](https://github.com/pushshift/api) API, you'll collect posts from two subreddits of your choosing.
-2. You'll then use NLP to train a classifier on which subreddit a given post came from. This is a binary classification problem.
+Here we searched for any outliers and null values that we decided to drop from our dataset as they were only a minute number of rows in our overall collected data. In the end, we had abotu 1850 rows from the Mario Kart subreddit and 1450 rows from the Smash Bros Ultimate subreddit. Next we decided to focus on the titles as we figured that you always get grabbed by a title before actually reading the content. So we dived into lemmatizing-to pull root words from the title words- and count vectorizing to determine the frequency of certain words-single words and consecutive pair words. Afterwards, we looked at the frequency with consideration of an existing set of English stop words to reduce any "noise" (as we don't want common words like "the" or "a" showing up on our list). 
 
+After discovering our potential hashtag words, we went on to a modeling process to see if we could find the best model in prediciting whether it can classify certain titles into the correct subreddit. Our goal here is that we want don't want to select a hashtag that is too ambiguous and won't have an immediate recognition to Mario Kart. Therefore, we have our second subreddit, which is slightly similar, to see how accurate our potential hashtag may be in representing the upcoming Mario Kart and not being confused for Smash Bros Ultimate. Through modeling we explore Naive Bayes and Classifier models and play with some of the hyperparameters to tune and find the best model and come to our conclusion.
 
-#### About the API
+## Conclusion and Recommendations
+After exploring a few different models and tuning those models by playing with the hyperparameters, we discovered that our Tuned AdaBoost model is ideal in differentiating titles into the correct reddit as it is 92.14% accurate in classifying our training set and 89.98% accurate in classifying our testing set. As shown in the table below, we can see all the training and testing model accuracy scores. While our Tuned AdaBoost model doesn't necessarily have the highest scores, we care more about the two scores being as close together as possible because it shows that our model isn't overfit to our training data. For instance, if we look at the Multinomial NB model, the training score is quite high with a 95.49% accuracy, but the testing score is nearly 10 points lower at 84.54% accuracy, which means that this model is very overfit to the training data set and doesn't do well in classifying new titles into the correct subreddit. Overall, our Tuned AdaBoost model still does fairly well considering that it managed to predict 90% of our titles to the correct subreddit out of a sample of over 3000 rows (which means that it was inaccurate on about 300 rows). 
 
-Pushshift's API is fairly straightforward. For example, if I want the posts from [`/r/boardgames`](https://www.reddit.com/r/boardgames), all I have to do is use the following url: https://api.pushshift.io/reddit/search/submission?subreddit=boardgames
+|Model|Training Score|Testing Score|
+|---|---|---|
+|Bernoulli NB|0.9669|0.8998|
+|Multinomial NB|0.9549|0.8454|
+|Logistic Regression|0.9694|0.9058|
+|AdaBoost Classifier|0.9202|0.8937|
+|Bernoulli NB Tuned|0.9702|0.9130|
+|Multinomial NB Tuned|0.9609|0.8599|
+|Logistic Regression Tuned|0.9694|0.9118|
+|AdaBoost Classifier Tuned|0.9214|0.8998|
 
-To help you get started, we have a primer video on how to use the API: https://youtu.be/eGi8jf1wHgw
+However, we do need to consider that this is still a relatively "surface level" model so there are downfalls to this model. Primarily, our model is only catered to two specific subreddits: Mario Kart and Smash Bros Ultimate. Therefore, we can't apply this model to other subreddits such as Mario Party or Super Mario Bros unless we make some modifications. In addition, we could also tune our hyperparameters further as we are only exploring four hyperparameters out of a myriad of possible combinations that could increase our model's accuracy so it can learn more and be capable of thinking more like a human. Furthermore, this data is also time based as recommendations made today may not be the same a year from now as these subreddits are constantly growing and topics may change. 
 
----
+Overall, we suggest that Nintendo market their new Mario Kart game as essentially the title. For example, if the game is going to be called "Mario Kart Global" then our recommended hashtag is "#mariokartglobal" as the most common words we discovered in the Mario Kart subreddit to be "kart" (when looking at a single word option) or "mario kart" (when looking at a consecutive two word option). Building off of the consecutive two word option, the next couple most common word combinations are: "kart tour" and "kart deluxe" which refer to the latest, Mario Kart Tour, and Mario Kart Deluxe 8, respectively. Additionally, we recommend refraining from including numbers in the hashtag based on the sole foundation of what we discovered from Mario Kart 8 Deluxe being referred to as "mario kart deluxe" instead of "mario kart 8." 
 
-### Requirements
-
-- Gather and prepare your data using the `requests` library.
-- **Create and compare two models**. One of these must be a Bayes classifier, however the other can be a classifier of your choosing: logistic regression, KNN, SVM, etc.
-- A Jupyter Notebook with your analysis for a peer audience of data scientists.
-- An executive summary of your results.
-- A short presentation outlining your process and findings for a semi-technical audience.
-
-**Pro Tip:** You can find a good example executive summary [here](https://www.proposify.biz/blog/executive-summary).
-
----
-
-### Necessary Deliverables / Submission
-
-- Code and executive summary must be in a clearly commented Jupyter Notebook.
-- You must submit your slide deck.
-- Materials must be submitted by **10:00 AM on Friday, January 31st**.
-
----
-
-## Rubric
-Your local instructor will evaluate your project (for the most part) using the following criteria.  You should make sure that you consider and/or follow most if not all of the considerations/recommendations outlined below **while** working through your project.
-
-For Project 3 the evaluation categories are as follows:<br>
-**The Data Science Process**
-- Problem Statement
-- Data Collection
-- Data Cleaning & EDA
-- Preprocessing & Modeling
-- Evaluation and Conceptual Understanding
-- Conclusion and Recommendations
-
-**Organization and Professionalism**
-- Organization
-- Visualizations
-- Python Syntax and Control Flow
-- Presentation
-
-**Scores will be out of 30 points based on the 10 categories in the rubric.** <br>
-*3 points per section*<br>
-
-| Score | Interpretation |
-| --- | --- |
-| **0** | *Project fails to meet the minimum requirements for this item.* |
-| **1** | *Project meets the minimum requirements for this item, but falls significantly short of portfolio-ready expectations.* |
-| **2** | *Project exceeds the minimum requirements for this item, but falls short of portfolio-ready expectations.* |
-| **3** | *Project meets or exceeds portfolio-ready expectations; demonstrates a thorough understanding of every outlined consideration.* |
-
-
-### The Data Science Process
-
-**Problem Statement**
-- Is it clear what the goal of the project is?
-- What type of model will be developed?
-- How will success be evaluated?
-- Is the scope of the project appropriate?
-- Is it clear who cares about this or why this is important to investigate?
-- Does the student consider the audience and the primary and secondary stakeholders?
-
-**Data Collection**
-- Was enough data gathered to generate a significant result?
-- Was data collected that was useful and relevant to the project?
-- Was data collection and storage optimized through custom functions, pipelines, and/or automation?
-- Was thought given to the server receiving the requests such as considering number of requests per second?
-
-**Data Cleaning and EDA**
-- Are missing values imputed/handled appropriately?
-- Are distributions examined and described?
-- Are outliers identified and addressed?
-- Are appropriate summary statistics provided?
-- Are steps taken during data cleaning and EDA framed appropriately?
-- Does the student address whether or not they are likely to be able to answer their problem statement with the provided data given what they've discovered during EDA?
-
-**Preprocessing and Modeling**
-- Is text data successfully converted to a matrix representation?
-- Are methods such as stop words, stemming, and lemmatization explored?
-- Does the student properly split and/or sample the data for validation/training purposes?
-- Does the student test and evaluate a variety of models to identify a production algorithm (**AT MINIMUM:** Bayes and one other model)?
-- Does the student defend their choice of production model relevant to the data at hand and the problem?
-- Does the student explain how the model works and evaluate its performance successes/downfalls?
-
-**Evaluation and Conceptual Understanding**
-- Does the student accurately identify and explain the baseline score?
-- Does the student select and use metrics relevant to the problem objective?
-- Does the student interpret the results of their model for purposes of inference?
-- Is domain knowledge demonstrated when interpreting results?
-- Does the student provide appropriate interpretation with regards to descriptive and inferential statistics?
-
-**Conclusion and Recommendations**
-- Does the student provide appropriate context to connect individual steps back to the overall project?
-- Is it clear how the final recommendations were reached?
-- Are the conclusions/recommendations clearly stated?
-- Does the conclusion answer the original problem statement?
-- Does the student address how findings of this research can be applied for the benefit of stakeholders?
-- Are future steps to move the project forward identified?
-
-
-### Organization and Professionalism
-
-**Project Organization**
-- Are modules imported correctly (using appropriate aliases)?
-- Are data imported/saved using relative paths?
-- Does the README provide a good executive summary of the project?
-- Is markdown formatting used appropriately to structure notebooks?
-- Are there an appropriate amount of comments to support the code?
-- Are files & directories organized correctly?
-- Are there unnecessary files included?
-- Do files and directories have well-structured, appropriate, consistent names?
-
-**Visualizations**
-- Are sufficient visualizations provided?
-- Do plots accurately demonstrate valid relationships?
-- Are plots labeled properly?
-- Are plots interpreted appropriately?
-- Are plots formatted and scaled appropriately for inclusion in a notebook-based technical report?
-
-**Python Syntax and Control Flow**
-- Is care taken to write human readable code?
-- Is the code syntactically correct (no runtime errors)?
-- Does the code generate desired results (logically correct)?
-- Does the code follows general best practices and style guidelines?
-- Are Pandas functions used appropriately?
-- Are `sklearn` and `NLTK` methods used appropriately?
-
-**Presentation**
-- Is the problem statement clearly presented?
-- Does a strong narrative run through the presentation building toward a final conclusion?
-- Are the conclusions/recommendations clearly stated?
-- Is the level of technicality appropriate for the intended audience?
-- Is the student substantially over or under time?
-- Does the student appropriately pace their presentation?
-- Does the student deliver their message with clarity and volume?
-- Are appropriate visualizations generated for the intended audience?
-- Are visualizations necessary and useful for supporting conclusions/explaining findings?
-
-
----
-
-### Why we choose this project for you?
-This project covers three of the biggest concepts we cover in the class: Classification Modeling, Natural Language Processing and Data Wrangling/Acquisition.
-
-Part 1 of the project focuses on **Data wrangling/gathering/acquisition**. This is a very important skill as not all the data you will need will be in clean CSVs or a single table in SQL.  There is a good chance that wherever you land you will have to gather some data from some unstructured/semi-structured sources; when possible, requesting information from an API, but often scraping it because they don't have an API (or it's terribly documented).
-
-Part 2 of the project focuses on **Natural Language Processing** and converting standard text data (like Titles and Comments) into a format that allows us to analyze it and use it in modeling.
-
-Part 3 of the project focuses on **Classification Modeling**.  Given that project 2 was a regression focused problem, we needed to give you a classification focused problem to practice the various models, means of assessment and preprocessing associated with classification.   
+## Sources
+- [Mario Kart Subreddit](#https://www.reddit.com/r/mariokart/)
+- [Smash Bros Ultimate Subreddit](#https://www.reddit.com/r/SmashBrosUltimate/)
+- [Reddit](#https://www.redditinc.com/)
