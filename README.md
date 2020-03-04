@@ -16,19 +16,6 @@ Here we searched for any outliers and null values that we decided to drop from o
 
 After discovering our potential hashtag words, we went on to a modeling process to see if we could find the best model in prediciting whether it can classify certain titles into the correct subreddit. Our goal here is that we want don't want to select a hashtag that is too ambiguous and won't have an immediate recognition to Mario Kart. Therefore, we have our second subreddit, which is slightly similar, to see how accurate our potential hashtag may be in representing the upcoming Mario Kart and not being confused for Smash Bros Ultimate. Through modeling we explore Naive Bayes and Classifier models and play with some of the hyperparameters to tune and find the best model and come to our conclusion.
 
-## Conclusion and Recommendations
-After exploring a few different models and tuning those models by playing with the hyperparameters, we discovered that our Tuned AdaBoost model is ideal in differentiating titles into the correct reddit as it is 92.14% accurate in classifying our training set and 89.98% accurate in classifying our testing set. As shown in the table below, we can see all the training and testing model accuracy scores. While our Tuned AdaBoost model doesn't necessarily have the highest scores, we care more about the two scores being as close together as possible because it shows that our model isn't overfit to our training data. For instance, if we look at the Multinomial NB model, the training score is quite high with a 95.49% accuracy, but the testing score is nearly 10 points lower at 84.54% accuracy, which means that this model is very overfit to the training data set and doesn't do well in classifying new titles into the correct subreddit. Overall, our Tuned AdaBoost model still does fairly well considering that it managed to predict 90% of our titles to the correct subreddit out of a sample of over 3000 rows (which means that it was inaccurate on about 300 rows). 
-
-|Model|Training Score|Testing Score|
-|---|---|---|
-|Bernoulli NB|0.9669|0.8998|
-|Multinomial NB|0.9549|0.8454|
-|Logistic Regression|0.9694|0.9058|
-|AdaBoost Classifier|0.9202|0.8937|
-|Bernoulli NB Tuned|0.9702|0.9130|
-|Multinomial NB Tuned|0.9609|0.8599|
-|Logistic Regression Tuned|0.9694|0.9118|
-|AdaBoost Classifier Tuned|0.9214|0.8998|
 
 ## Conclusion and Recommendations
 After exploring a few different models and tuning those models by playing with the hyperparameters, we discovered that our Count Vectorizer AdaBoost Classifier model is ideal in differentiating titles into the correct reddit as it is 92.11% accurate in classifying our training set and 90.38% accurate in classifying our testing set. As shown in the table below, we can see all the training and testing model accuracy scores. While our Count Vectorizer AdaBoost Classifier model doesn't necessarily have the highest scores, we care more about the two scores being as close together as possible because it shows that our model isn't overfit to our training data. For instance, if we look at the Multinomial NB model, the training score is quite high with a 95.49% accuracy, but the testing score is nearly 10 points lower at 84.54% accuracy, which means that this model is very overfit to the training data set and doesn't do well in classifying new titles into the correct subreddit. Overall, our Count Vectorizer AdaBoost Classifier model still does fairly well considering that it managed to predict about 90% of our titles to the correct subreddit out of a sample of over 3000 rows (which means that it was inaccurate on about 300 rows). 
